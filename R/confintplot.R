@@ -18,12 +18,12 @@
 #' set.seed(1)
 #' 
 #' l <- list(a=c(rnorm(5)), b=rnorm(9), ctrl=rnorm(15, 0.5))
-#' (errorplot(l, ylab="Q", main="Pilot test results"))
+#' (confintplot(l, ylab="Q", main="Pilot test results"))
 #'  
 #' ## many variables
 #' set.seed(1)
 #' xx <- matrix(0.1*(1:40)*runif(160, 1, 4)^2, 20, byrow=TRUE)
-#' errorplot(xx, ylab="Magnitude")
+#' confintplot(xx, ylab="Magnitude")
 #' 
 #' ## more advanced graphical parameters
 #' set.seed(1)
@@ -34,13 +34,13 @@
 #' col.median <- "lightgray"
 #' col.box <- rainbow(3, start=0.6, end=1)
 #'
-#' z <- errorplot(dtf, p.level=0.99, whisker.length=0.9, box.width=0.7,
+#' z <- confintplot(dtf, p.level=0.99, whisker.length=0.9, box.width=0.7,
 #'   col.mean=col.mean, col.median=col.median, col.box=col.box, 
 #'   lwd.box=2, lwd.centre=1, lty.centre=2)
 #'
 
 
-errorplot <- function(x, nrep=NULL, p.level=0.95, smooth=TRUE, box.width=0.5,
+confintplot <- function(x, nrep=NULL, p.level=0.95, smooth=TRUE, box.width=0.5,
   whisker.length=box.width*1.4, col.mean="lightblue", col.median="orange",
   col.box=1, lwd.box=1, lwd.centre=2, lty.centre=1, ...) {
           
