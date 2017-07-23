@@ -1,0 +1,776 @@
+regmatches(text, gregexpr("<U[\\+0-9A-Z]+?>", text))
+regmatches(text, gregexpr("<[\\+0-9A-Z]+?>", text))
+regmatches(text, gregexpr("<[\\+?0-9A-Z]+?>", text))
+regmatches(text, gregexpr("<[\\+0-9A-Z]+?>", text))
+regmatches(text, gregexpr("<[\\+0-9A-Z]+>", text))
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+regmatches(text, gregexpr("<[\\+0-9A-Z]>", text))
+*
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+gregexpr("<[\\+0-9A-Z]*>", text)
+text <- "Some other text <header1>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+regmatches(text, gregexpr("<[0-9A-Z]*>", text))
+regmatches(text, gregexpr("<[\\+?0-9A-Z]*>", text))
+text
+text <- "Some other text <U0E2B>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<[\\+?0-9A-Z]*>", text))
+text <- "Some other text <U+0E2B>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+text <- "Some other text <Q+0E2B>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+text <- "Some other text 1<Q+0E2B>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<[\\+0-9A-Z]*>", text))
+regmatches(text, gregexpr("<Q[\\+0-9A-Z]*>", text))
+regmatches(text, gregexpr("<U[\\+0-9A-Z]*>", text))
+regmatches(text, gregexpr("<U+[0-9A-Z]*>", text))
+regmatches(text, gregexpr("<U\\+[0-9A-Z]*>", text))
+grep("<U\\+[0-9A-Z]*>", text)
+text <- "Some other text <Q+0E2B><U+0E2B2>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah"
+regmatches(text, gregexpr("<U\\+[0-9A-Z]*>", text))
+regmatches(text, gregexpr("<U\\+[0-9A-Z]{4}>", text))
+text <- c("Some other text <Q+0E2B><U+0E2B2>, 1 < 2, <p> <U+0E2B><U+0E25><U+0E07><U+0E1E> </p> also blah blah", "<U+0E2B><U+0E25>")
+regmatches(text, gregexpr("<U\\+[0-9A-Z]{4}>", text))
+randhsv <- function(n, h=0:1, s=1, v=1, a=1, permute=TRUE, jitter=TRUE, trans=TRUE,#
+                    inp=c(0, 0.17, 0.33, 0.50, 0.67, 0.84, 0.95, 1),#
+                    out=c(0, 0.17, 0.43, 0.52, 0.75, 0.84, 0.95, 1)) {#
+	if (any(c(h, s, v, a) > 1 | c(h, s, v, a) < 0)) {#
+		stop("arguments h, s, v and a must be in the range [0, 1]")#
+	}#
+#
+    permute <- rep(permute, 4)[1:4]#
+    jitter <- rep(jitter, 4)[1:4]#
+#
+	hue#
+	if (length(h) > 1) {#
+		r <- diff(range(h))#
+		h <- seq(min(h), max(h)-(r/n), length.out=n)#
+        if (permute[1]) {#
+            h <- sample(h, n)#
+        }#
+        if (jitter[1]) {#
+            h <- h + runif(1, 0, r/n)#
+        }#
+        if (trans) {#
+	        xp <- inp#
+	        yp <- out#
+	        f <- approxfun(xp, yp)#
+	        h <- f(h)#
+        }#
+	}#
+	saturation#
+	if (length(s) > 1) {#
+		r <- diff(range(s))#
+		s <- seq(min(s), max(s)-(r/n), length.out=n)#
+        if (permute[2]) {#
+            s <- sample(s, n)#
+        }#
+        if (jitter[2]) {#
+            s <- s + runif(1, 0, r/n)#
+        }#
+	}#
+#
+	value#
+	if (length(v) > 1) {#
+		r <- diff(range(v))#
+		v <- seq(min(v), max(v)-(r/n), length.out=n)#
+        if (permute[3]) {#
+            v <- sample(v, n)#
+        }#
+        if (jitter[3]) {#
+            v <- v + runif(1, 0, r/n)#
+        }#
+	}#
+	alpha#
+	if (length(a) > 1) {#
+		r <- diff(range(a))#
+		a <- seq(min(a), max(a)-(r/n), length.out=n)#
+        if (permute[4]) {#
+            a <- sample(a, n)#
+        }#
+        if (jitter[4]) {#
+            a <- a + runif(1, 0, r/n)#
+        }#
+	}#
+#
+    col <- hsv(h, s, v, alpha=a)#
+    return(col)#
+}#
+#
+### compare transformed and not transmormed colours#
+# quartz(, 6, 3)#
+opar <- par(no.readonly=TRUE)#
+par(oma=c(2, 0, 0, 0), mar=rep(0.2, 4), mfrow=c(3, 1), xaxs="i")#
+#
+n <- 15#
+x <- rep(1, n)#
+#
+inp <- c(0, 0.05, 0.23, 0.40, 0.60, 0.75, 0.95, 1)#
+out <- c(0, 0.05, 0.17, 0.45, 0.55, 0.80, 0.95, 1)
+plot(c(0, 1), c(0, 1), col="blue", type="l", axes=FALSE, xlim=c(0-0.5/n, 1-0.5/n))#
+lines(inp, out, type="o")
+col.tr <- randhsv(n, h=0:1, permute=0, jitter=0, trans=TRUE, inp=inp, out=out)#
+col.nt <- randhsv(n, h=0:1, permute=0, jitter=0, trans=FALSE)#
+#
+barplot(x, col=col.tr, yaxt="n")#
+barplot(x, col=col.nt, yaxt="n", names.arg=round((0:(n-1))/n, 2), cex.names=0.5)
+randhsv <- function(n, h=0:1, s=1, v=1, a=1, permute=TRUE, jitter=TRUE, trans=TRUE,#
+                    inp=c(0, 0.17, 0.33, 0.50, 0.67, 0.84, 0.95, 1),#
+                    out=c(0, 0.17, 0.43, 0.52, 0.75, 0.84, 0.95, 1)) {#
+	if (any(c(h, s, v, a) > 1 | c(h, s, v, a) < 0)) {#
+		stop("arguments h, s, v and a must be in the range [0, 1]")#
+	}#
+#
+    permute <- rep(permute, 4)[1:4]#
+    jitter <- rep(jitter, 4)[1:4]#
+#
+	hue#
+	if (length(h) > 1) {#
+		r <- diff(range(h))#
+		h <- seq(min(h), max(h)-(r/n), length.out=n)#
+        if (permute[1]) {#
+            h <- sample(h, n)#
+        }#
+        if (jitter[1]) {#
+            h <- h + runif(1, 0, r/n)#
+        }#
+        if (trans) {#
+	        xp <- inp#
+	        yp <- out#
+	        f <- approxfun(xp, yp)#
+	        h <- f(h)#
+        }#
+	}#
+	saturation#
+	if (length(s) > 1) {#
+		r <- diff(range(s))#
+		s <- seq(min(s), max(s)-(r/n), length.out=n)#
+        if (permute[2]) {#
+            s <- sample(s, n)#
+        }#
+        if (jitter[2]) {#
+            s <- s + runif(1, 0, r/n)#
+        }#
+	}#
+#
+	value#
+	if (length(v) > 1) {#
+		r <- diff(range(v))#
+		v <- seq(min(v), max(v)-(r/n), length.out=n)#
+        if (permute[3]) {#
+            v <- sample(v, n)#
+        }#
+        if (jitter[3]) {#
+            v <- v + runif(1, 0, r/n)#
+        }#
+	}#
+	alpha#
+	if (length(a) > 1) {#
+		r <- diff(range(a))#
+		a <- seq(min(a), max(a)-(r/n), length.out=n)#
+        if (permute[4]) {#
+            a <- sample(a, n)#
+        }#
+        if (jitter[4]) {#
+            a <- a + runif(1, 0, r/n)#
+        }#
+	}#
+#
+    col <- hsv(h, s, v, alpha=a)#
+    return(col)#
+}#
+#
+### compare transformed and not transmormed colours#
+# quartz(, 6, 3)#
+opar <- par(no.readonly=TRUE)#
+par(oma=c(2, 0, 0, 0), mar=rep(0.2, 4), mfrow=c(3, 1), xaxs="i")#
+#
+n <- 15#
+x <- rep(1, n)#
+#
+inp <- c(0, 0.05, 0.23, 0.40, 0.60, 0.75, 0.95, 1)#
+out <- c(0, 0.05, 0.17, 0.45, 0.55, 0.80, 0.95, 1)#
+#
+plot(c(0, 1), c(0, 1), col="blue", type="l", axes=FALSE, xlim=c(0-0.5/n, 1-0.5/n))#
+lines(inp, out, type="o")#
+#
+col.tr <- randhsv(n, h=0:1, permute=0, jitter=0, trans=TRUE, inp=inp, out=out)#
+col.nt <- randhsv(n, h=0:1, permute=0, jitter=0, trans=FALSE)#
+#
+barplot(x, col=col.tr, yaxt="n")#
+barplot(x, col=col.nt, yaxt="n", names.arg=round((0:(n-1))/n, 2), cex.names=0.5)#
+#
+par(opar)
+randhsv(20)
+randhsv <- function(n, h=0:1, s=1, v=1, a=1, permute=TRUE, jitter=TRUE, trans=TRUE,#
+                    inp=c(0, 0.17, 0.33, 0.50, 0.67, 0.84, 0.95, 1),#
+                    out=c(0, 0.17, 0.43, 0.52, 0.75, 0.84, 0.95, 1)) {#
+	if (any(c(h, s, v, a) > 1 | c(h, s, v, a) < 0)) {#
+		stop("arguments h, s, v and a must be in the range [0, 1]")#
+	}#
+#
+    permute <- rep(permute, 4)[1:4]#
+    jitter <- rep(jitter, 4)[1:4]#
+#
+	# hue#
+	if (length(h) > 1) {#
+		r <- diff(range(h))#
+		h <- seq(min(h), max(h)-(r/n), length.out=n)#
+        if (permute[1]) {#
+            h <- sample(h, n)#
+        }#
+        if (jitter[1]) {#
+            h <- h + runif(1, 0, r/n)#
+        }#
+        if (trans) {#
+	        xp <- inp#
+	        yp <- out#
+	        f <- approxfun(xp, yp)#
+	        h <- f(h)#
+        }#
+	}#
+	# saturation#
+	if (length(s) > 1) {#
+		r <- diff(range(s))#
+		s <- seq(min(s), max(s)-(r/n), length.out=n)#
+        if (permute[2]) {#
+            s <- sample(s, n)#
+        }#
+        if (jitter[2]) {#
+            s <- s + runif(1, 0, r/n)#
+        }#
+	}#
+#
+	# value#
+	if (length(v) > 1) {#
+		r <- diff(range(v))#
+		v <- seq(min(v), max(v)-(r/n), length.out=n)#
+        if (permute[3]) {#
+            v <- sample(v, n)#
+        }#
+        if (jitter[3]) {#
+            v <- v + runif(1, 0, r/n)#
+        }#
+	}#
+	# alpha#
+	if (length(a) > 1) {#
+		r <- diff(range(a))#
+		a <- seq(min(a), max(a)-(r/n), length.out=n)#
+        if (permute[4]) {#
+            a <- sample(a, n)#
+        }#
+        if (jitter[4]) {#
+            a <- a + runif(1, 0, r/n)#
+        }#
+	}#
+#
+    col <- hsv(h, s, v, alpha=a)#
+    return(col)#
+}#
+#
+### compare transformed and not transmormed colours#
+# quartz(, 6, 3)#
+opar <- par(no.readonly=TRUE)#
+par(oma=c(2, 0, 0, 0), mar=rep(0.2, 4), mfrow=c(3, 1), xaxs="i")#
+#
+n <- 15#
+x <- rep(1, n)#
+randhsv(20)#
+inp <- c(0, 0.05, 0.23, 0.40, 0.60, 0.75, 0.95, 1)#
+out <- c(0, 0.05, 0.17, 0.45, 0.55, 0.80, 0.95, 1)#
+#
+plot(c(0, 1), c(0, 1), col="blue", type="l", axes=FALSE, xlim=c(0-0.5/n, 1-0.5/n))#
+lines(inp, out, type="o")
+col.tr <- randhsv(n, h=0:1, permute=0, jitter=0, trans=TRUE, inp=inp, out=out)#
+col.nt <- randhsv(n, h=0:1, permute=0, jitter=0, trans=FALSE)#
+#
+barplot(x, col=col.tr, yaxt="n")#
+barplot(x, col=col.nt, yaxt="n", names.arg=round((0:(n-1))/n, 2), cex.names=0.5)#
+#
+par(opar)
+opar <- par(no.readonly=TRUE)#
+par(mar=rep(2, 4), mfrow=c(2, 2))#
+#
+n <- 10#
+#
+col <- randhsv(n)#
+barplot(runif(n)+1, col=col, border=col)#
+#
+col <- randhsv(n, h=c(0.2, 0.8), v=c(0.5, 1), s=c(0.5, 1))#
+plot(runif(n), cex=6, pch=16, col=col, ann=FALSE, axes=FALSE, xpd=NA)#
+#
+col <- randhsv(n, h=0, v=c(0.2, 0.8), s=c(0, 1), a=0.9)#
+barplot(runif(n)+1, col=col, border=col)#
+#
+col <- randhsv(n, h=0:1, s=1:5/5, v=1:5/5, permute=c(1, 1, 0), jitter=0)#
+hist((runif(1000)+runif(1000))/2, breaks=(0:n)/n, border="white", col=col, xaxt="n", main="")#
+axis(1, 0:n/n, round(0:n/n, 2), cex.axis=0.6)#
+#
+par(opar)
+randlab <- function(n) {#
+    f <- colorRamp(space="Lab",#
+    colors=c("red", "yellow", "green", "cyan", "blue", "magenta"))#
+    col <- f(0.2)#
+    rgb(col, maxColorValue=255)#
+}
+f <- colorRamp(space="Lab",#
+      colors=c("red", "yellow", "green", "cyan", "blue", "magenta"))
+f(0.2)
+f
+colours=c("red", "yellow", "green", "cyan", "blue", "magenta")
+f <- colorRamp(space="Lab", colors=colours)
+f(0.2)
+f <- colorRampPalette(space="Lab", colors=colours)
+f(0.2)
+f(2)
+f <- colorRamp(space="Lab", colors=colours)
+f(2)
+f(0.2)
+n <- 3
+1-(1/n)
+1/n
+s <- seq(1/n, 1, n) - runif(1, 0, 1/n)
+s
+seq(1/n, 1, n)
+s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)
+s
+randlab <- function(n, colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="Lab", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    col <- f(2)#
+    rgb(col, maxColorValue=255)#
+}
+barplot(1:3)
+barplot(1:3, col=randlab(3))
+randlab(3)
+n
+c("red", "yellow", "green", "cyan", "blue", "magenta")
+f <- colorRamp(space="Lab", colors=colours)
+s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)
+col <- f(2)
+col
+col <- f(s)
+col
+randlab <- function(n, colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="Lab", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+n#
+barplot(1:3, col=randlab(3))
+barplot(1:3, col=randlab(3))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="Lab", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+barplot(1:3, col=randlab(3))
+barplot(1:3, col=randlab(3))
+barplot(1:6, col=randlab(6))
+barplot(1:6, col=randlab(6, colours=c("white", "#A848F2", "black")))
+barplot(1:6, col=randlab(6, colours=c("white", "#A848FF", "black")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="rgb", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="rgb", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="Lab", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+set.seed(1)#
+#
+barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="rgb", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+set.seed(1)#
+#
+barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="rgb", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+set.seed(1)#
+#
+# barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+randlab <- function(n, permute=TRUE,#
+  colours=c("red", "yellow", "green", "cyan", "blue", "magenta")) {#
+    f <- colorRamp(space="Lab", colors=colours)#
+    s <- seq(1/n, 1, l=n) - runif(1, 0, 1/n)#
+    if (permute) {#
+    	s <- sample(s, n)#
+    }#
+    col <- f(s)#
+    rgb(col, maxColorValue=255)#
+}#
+#
+set.seed(1)#
+#
+# barplot(1:6, col=randlab(6))#
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF", "black")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#A848FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8848FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8844FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8866FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8844FF")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8844FF00")))
+barplot(1:6, col=randlab(6, FALSE, colours=c("white", "#8844FFff")))
+barplot(1:4, col=randlab(4, FALSE, colours=c("white", "#8844FF", "red")))
+barplot(1:4, col=randlab(4, FALSE, colours=c("white", "#8844FF", "orange")))
+structure(list(years_to_birth = c(39, 45, 83, 68, 48, 52, 66, #
+50, 61, 67), pathologic_stage = structure(c(NA, 4L, NA, 4L, 4L, #
+4L, 4L, 3L, 2L, 4L), .Names = c("tcga.ba.4076", "tcga.ba.4077", #
+"tcga.ba.4078", "tcga.bb.4217", "tcga.bb.4223", "tcga.bb.4224", #
+"tcga.bb.4227", "tcga.bb.4228", "tcga.cn.4722", "tcga.cn.4723"#
+), .Label = c("stage i", "stage ii", "stage iii", "stage iva", #
+"stage ivb", "stage ivc"), class = "factor")), .Names = c("years_to_birth", #
+"pathologic_stage"), row.names = c(NA, 10L), class = "data.frame")
+df <- structure(list(years_to_birth = c(39, 45, 83, 68, 48, 52, 66, #
+  50, 61, 67), pathologic_stage = structure(c(NA, 4L, NA, 4L, 4L, #
+  4L, 4L, 3L, 2L, 4L), .Names = c("tcga.ba.4076", "tcga.ba.4077", #
+  "tcga.ba.4078", "tcga.bb.4217", "tcga.bb.4223", "tcga.bb.4224", #
+  "tcga.bb.4227", "tcga.bb.4228", "tcga.cn.4722", "tcga.cn.4723"),#
+  .Label = c("stage i", "stage iii", "stage iii", "stage iva", #
+  "stage ivb", "stage ivc"), class = "factor")), .Names = c("years_to_birth", #
+  "pathologic_stage"), row.names = c(NA, 10L), class = "data.frame")
+bartlett.test(years_to_birth ~ pathologic_stage, data = df)
+df <- structure(list(years_to_birth = c(39, 45, 83, 68, 48, 52, 66, #
+  50, 61, 67), pathologic_stage = structure(c(NA, 4L, NA, 4L, 4L, #
+  4L, 4L, 3L, 3L, 4L), .Names = c("tcga.ba.4076", "tcga.ba.4077", #
+  "tcga.ba.4078", "tcga.bb.4217", "tcga.bb.4223", "tcga.bb.4224", #
+  "tcga.bb.4227", "tcga.bb.4228", "tcga.cn.4722", "tcga.cn.4723"),#
+  .Label = c("stage i", "stage ii", "stage iii", "stage iva", #
+  "stage ivb", "stage ivc"), class = "factor")), .Names = c("years_to_birth", #
+  "pathologic_stage"), row.names = c(NA, 10L), class = "data.frame")#
+#
+bartlett.test(years_to_birth ~ pathologic_stage, data = df)
+df
+library(igraph)#
+g <- graph.tree(20, 2)#
+plot(g, layout = layout.reingold.tilford(g, root=1))
+g
+actors <- data.frame(name=c("Alice", "Bob", "Cecil", "David",#
+                            "Esmeralda"),#
+                     age=c(48,33,45,34,21),#
+                     gender=c("F","M","F","M","F"))#
+relations <- data.frame(from=c("Bob", "Cecil", "Cecil", "David",#
+                               "David", "Esmeralda"),#
+                        to=c("Alice", "Bob", "Alice", "Alice", "Bob", "Alice"),#
+                        same.dept=c(FALSE,FALSE,TRUE,FALSE,FALSE,TRUE),#
+                        friendship=c(4,5,5,2,1,1), advice=c(4,5,5,4,2,3))#
+g <- graph_from_data_frame(relations, directed=TRUE, vertices=actors)
+g
+relations
+actors
+print(g)
+g <- graph_from_data_frame(relations, directed=TRUE, vertices=actors)
+plot(g)
+g <- graph_from_literal( Alice-Bob-Cecil-Alice, Daniel-Cecil-Eugene,#
+                     Cecil-Gordon )
+g
+plot(g)
+plot(g2)
+g2 <- graph_from_literal( Alice-Bob:Cecil:Daniel, Cecil:Daniel-Eugene:Gordon )
+plot(g2)
+g3 <- graph_from_literal( Alice +-+ Bob --+ Cecil +-- Daniel,
+Eugene --+ Gordon:Helen )
+plot(g3)
+plot(g2)
+g4 <- graph_from_literal( Alice -- Bob -- Daniel, Cecil:Gordon, Helen )
+g4
+plot(g4)
+plot(g4, layout = layout.reingold.tilford(g))
+plot(g2, layout = layout.reingold.tilford(g))
+plot(g3)
+plot(g4)
+df <- data.frame(#
+    col1 = c("dog", "cat", "bird", "mammal", "avis", "canis", "feline"),#
+    col2 = c("canis", "feline", "avis", "animal", "animal", "mammal", "mammal"))#
+#
+g <- graph_from_data_frame(df)
+g
+plot(g)
+df
+plot(g, layout=layout.reingold.tilford(g))
+df <- data.frame(#
+    col1 = c("dog", "cat", "bird", "mammal", "avis", "canis", "feline"),#
+    col2 = c("canis", "feline", "avis", "animal", "animal", "mammal", "mammal"))#
+#
+g <- graph_from_data_frame(df)#
+#
+plot(g, layout=layout.reingold.tilford(g))
+g <- graph_from_data_frame(df, directed=FALSE)
+plot(g, layout=layout.reingold.tilford(g))
+m <- as.matrix(read.table(text="#
+  x1 x2 x3 x4 x5 x6#
+   8  9  8  8  7  5#
+   7  8  8  8  8  6#
+   6  7  7  8  9  8#
+   6  7  6  5  4  4#
+   7  8  8  9  8  7#
+   5  6  7  6  5  6#
+   5  6  6  5  5  4", header=TRUE))#
+m#
+#
+m.dist <- as.matrix(dist(t(m), method="euclidean"))#
+m.dist <- m.dist[row(m.dist) == col(m.dist)+1]#
+m.dist#
+#
+library(vegan)#
+#
+m.diss <- as.matrix(vegdist(t(m), method="jaccard"))#
+m.diss <- m.diss[row(m.diss) == col(m.diss)+1]#
+m.diss#
+#
+library(TSdist)#
+#
+m.tsdi <- as.matrix(TSDatabaseDistances(t(m), distance="cort"))#
+m.tsdi <- m.tsdi[row(m.tsdi) == col(m.tsdi)+1]#
+m.tsdi
+source('~/Documents/R/egne funksjoner/pollplot.R')#
+source('~/Documents/R/egne funksjoner/get.polls.R')#
+#
+resp.all <- get.polls()#
+#
+lapply(resp.all, function(x) range(x[,1]))#
+max(sapply(resp.all, function(x) diff(range(x[,1]))))#
+matrix(names(resp.all))#
+str(resp.all)#
+#
+quartz.options(h=4, w=7)#
+par(mfrow=c(1, 2), mar=c(2, 3, 3, 1), family="Courier", cex=0.8, mgp=c(2, 0.6, 0))#
+pollplot(resp.all, columns=c("ap", "h", "frp", "sp"), ann.text="", cex.main=0.8, cex.ylab=0.7, begin=Sys.Date()-365/2, avg.type="right-tri", avg.wd=45, yaxs.int=2, autopar=FALSE)#
+#
+pollplot(resp.all, columns=c("krf", "sv", "v", "mdg", "rødt"), ann.text="", cex.main=0.8, cex.ylab=0.7, begin=Sys.Date()-365/2, avg.type="right-tri", avg.wd=45, yaxs.int=0.571, autopar=FALSE)
+quartz.options(h=4, w=7)#
+par(mfrow=c(1, 2), mar=c(2, 3, 3, 1), family="Courier", cex=0.8, mgp=c(2, 0.6, 0))#
+pollplot(resp.all, columns=c("ap", "h", "frp", "sp"), ann.text="", cex.main=0.8, cex.ylab=0.7, begin=Sys.Date()-365/2, avg.type="right-tri", avg.wd=45, yaxs.int=2, autopar=FALSE)#
+#
+pollplot(resp.all, columns=c("krf", "sv", "v", "mdg", "rødt"), ann.text="", cex.main=0.8, cex.ylab=0.7, begin=Sys.Date()-365/2, avg.type="right-tri", avg.wd=45, yaxs.int=0.5, autopar=FALSE)
+library(xts)
+data(sample_matrix)#
+sample.xts <- as.xts(sample_matrix, descr='my new xts object')
+plot(sample.xts)
+sample.xts
+sample.xts <- as.xts(sample_matrix)
+sample_matrix
+plot(sample.xts[, "Open"])
+plot(x = sample.xts[, "Open"],#
+     xlab = "Time", #
+     ylab = "RTWP Levels (dBm)", #
+     main = "RTWP Vs. Time", #
+     ylim = c(-110,-70), #
+     major.ticks = "days", #
+     minor.ticks = FALSE,#
+     col = "#1b9e77")
+plot(x = sample.xts[, "Open"],#
+     xlab = "Time", #
+     ylab = "RTWP Levels (dBm)", #
+     main = "RTWP Vs. Time", #
+     major.ticks = "days", #
+     minor.ticks = FALSE,#
+     col = "#1b9e77")
+plot(x = sample.xts[, "Open"],#
+     xlab = "Time", #
+     ylab = "RTWP Levels (dBm)", #
+     main = "RTWP Vs. Time", #
+     major.ticks = "days", #
+     minor.ticks = FALSE,#
+     col = "#1b9e77", lwd=2)
+traceback()
+browse()
+browser()
+plot(x = sample.xts[, "Open"],#
+     xlab = "Time", #
+     ylab = "RTWP Levels (dBm)", #
+     main = "RTWP Vs. Time", #
+     major.ticks = "days", #
+     minor.ticks = FALSE,#
+     col = "#1b9e77", lwd=2)#
+browser()
+plot.xts
+plot(sample.xts[, "Open"], lwd=2)
+plot(sample.xts[, "Open"], lwd=2, axis=FALSE)
+plot(sample.xts[, "Open"], lwd=2, axes=FALSE)
+matplot(sample.xts)
+plot(sample.xts[, "Open"], type="n")
+matlines(sample.xts)
+plot(sample.xts[, "Open"], type="n", ylim=c(min(sample.xts), max(sample.xts)))
+matlines(sample.xts)
+matlines(as.matrix(sample.xts))
+sample.xts
+matlines(sample.xts[, -1])
+matlines(sample.xts, ylim=c(min(sample.xts), max(sample.xts)))
+matplot(sample.xts, type="l", ylim=c(min(sample.xts), max(sample.xts)))
+matplot(sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(sample.xts[, "Open"], type="n")
+matplot(sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+matlines(sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(sample.xts[, "Open"], type="n")
+matlines(sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+matlines(seq_along(sample.xts), sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+seq_along(sample.xts)
+matlines(1:nrow(sample.xts), sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(1:nrow(sample.xts), sample.xts[, "Open"], type="n")
+matlines(1:nrow(sample.xts), sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(sample.xts[, -1], sample.xts[, "Open"], type="n")
+plot(rownames(sample.xts), sample.xts[, "Open"], type="n")
+rownames(sample.xts)
+plot(index(sample.xts), sample.xts[, "Open"], type="n")
+matlines(index(sample.xts), sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(sample.xts[, "Open"], type="n")
+matlines(index(sample.xts), sample.xts, type="l", lty=1, ylim=c(min(sample.xts), max(sample.xts)))
+plot(sample.xts[, "Open"], type="n", ylim=c(min(sample.xts), max(sample.xts)))
+matlines(index(sample.xts), sample.xts)
+matlines(index(sample.xts), sample.xts, lty=1)
+plot(sample.xts[, "Open"], type="n", ylim=c(min(sample.xts), max(sample.xts)))
+matlines(index(sample.xts), sample.xts, lty=1)
+plot(as.zoo(sample.xts))
+plot(as.zoo(sample.xts[, 1]))
+library(xtsExtra)
+library(ggplot)
+library(ggplot2)
+plot.histogram = function(x.var, y.var, pf) {#
+  ggplot(aes_string(x.var, y.var), data = pf) +#
+    geom_bar(stat="identity", color = "black", fill = "steelblue") #
+}
+plot.histogram(1:10, 1:10)
+plot.histogram(1:10, 1:10, 1:10)
+df <- data.frame(a=runif(9), b=runif(9))
+plot.histogram(a, b, df)
+ggplot(aes_string(a, b), data = df)
+ggplot(aes_string(df$a, df$b), data = df)
+ggplot(aes_string(df$a, df$b))
+df <- data.frame(#
+  gp = factor(rep(letters[1:3], each = 10)),#
+  y = rnorm(30)#
+)#
+ds <- plyr::ddply(df, "gp", plyr::summarise, mean = mean(y), sd = sd(y))#
+#
+# The summary data frame ds is used to plot larger red points on top#
+# of the raw data. Note that we don't need to supply `data` or `mapping`#
+# in each layer because the defaults from ggplot() are used.#
+ggplot(df, aes(gp, y)) +#
+  geom_point() +#
+  geom_point(data = ds, aes(y = mean), colour = 'red', size = 3)
+plot.histogram(gp, y, df)
+plot.histogram = function(x.var, y.var, pf) {#
+  ggplot(aes(x.var, y.var), data = pf) +#
+    geom_bar(stat="identity", color = "black", fill = "steelblue") #
+}
+plot.histogram(gp, y, df)
+plot.histogram = function(x.var, y.var, pf) {#
+  ggplot(aes(x.var, y.var), data = pf) #
+}
+plot.histogram(gp, y, df)
+plot.histogram = function(x.var, y.var, pf) {#
+  ggplot(aes_string(x.var, y.var), data = pf) +#
+    geom_bar(stat="identity", color = "black", fill = "steelblue") #
+}
+plot.histogram(df$gp, df$y, df)
+plot.histogram = function(x.var, y.var=NULL, pf) {#
+  ggplot(aes_string(x.var, y.var), data = pf) +#
+    geom_bar(stat="identity", color = "black", fill = "steelblue") #
+}
+plot.histogram(df$gp, pf = df)
+plot.histogram(df$y, pf = df)
+df <- data.frame(#
+  gp = runif(30),#
+  y = rnorm(30)#
+)
+plot.histogram(df$y, pf = df)
+plot.histogram = function(x.var, y.var=NA, pf) {#
+  ggplot(aes_string(x.var, y.var), data = pf) +#
+    geom_bar(stat="identity", color = "black", fill = "steelblue") #
+}
+plot.histogram(df$gp, pf = df)
+plot.histogram(df$gp, df$y, pf = df)
+qplot
+traceback()
+plot(1:10)
+traceback()
+require(roxygen2)#
+require(devtools)#
+setwd("~/Documents/R/prosjekter/errorplot")#
+document()
+load_all()
+l <- list(a=c(runif(9)), b=runif(9))
+is.list(l)
+errorplot(data.frame(l))
+errorplot(data.frame(a=runif(9), b=runif(9)))
+load_all()
+errorplot(data.frame(a=runif(9), b=runif(9)))
+errorplot(l)
+l <- list(a=c(runif(8)), b=runif(9))
+errorplot(l)
+errorplot
+l <- list(a=c(runif(3)), b=runif(9))
+errorplot(l)
+l <- list(a=c(runif(4)), b=runif(9))
+errorplot(l)
+l <- list(a=c(runif(8)), b=runif(9))
+errorplot(l)
+errorplot(list(a=runif(5), b=runif(9)))
+errorplot(list(a=runif(7), b=runif(9)))
+errorplot(list(a=runif(7), b=runif(9)))
+errorplot(list(a=runif(8), b=runif(9)))
+errorplot(list(a=runif(8), b=runif(9)))
+errorplot(list(a=runif(8), b=runif(9)))
+errorplot(list(a=runif(4), b=runif(9)))
