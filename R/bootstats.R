@@ -83,7 +83,7 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5,
     
     if (return_resamples) {
     	stats <- list(resamples=b, stats)
-    	class(stats) <- "bootlist"
+    	class(stats) <- c("bootlist", class(stats))
     }
     
     stats
@@ -103,4 +103,6 @@ print.bootlist <- function(x, ...){
     x <- x[[2]]
     NextMethod()
 }
+
+
 
