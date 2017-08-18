@@ -139,3 +139,5 @@ confintplot <- function(x, nrep=NULL, p.level=0.95, smooth=TRUE, box.width=0.5,
 
     invisible(list(stats=stats0, x=xseq))
 }
+
+

@@ -1,4 +1,4 @@
-#' Obtain mean and median with bootstrapped confidence intervals.
+#' Calculate mean and median with bootstrapped confidence intervals.
 #'
 #' This function returns the bootstrapped mean and median, 
 #' and the respective confidence intervals, of the supplied numeric vector.
@@ -10,28 +10,25 @@
 #' 
 #' bootstats(1:4, nrep=9999)
 #' 
-
-# bootstats(c(1, 9, 9, 6, 2, 5, 4, 4), 
-  # smooth=function(b=b) {
-  	  # b + rnorm(length(b), 0, 0.1)
-  # })
-
-
-# x <- round(rnorm(15, 10, 2))
-
-# entropy <- function(x, base=2) {
-    # freqs <- table(x) / length(x)
-    # -sum(freqs * log(freqs, base=base))
-# }
-
-# H5 <- entropy(x, base=5)
-
-# bootstats(x, 
-  # smooth=function(b=b, x=x, H5=H5) {
-      # b + rnorm(length(b), 0, H5/sqrt(length(x)))
-  # })
-
-# bootstats(x)
+#' ## Simple smooth function based on jitter()
+#' bootstats(1:5, smooth=function(b=b) jitter(b))
+#' 
+#' ## Alternative entropy based smooth function
+#' x <- round(rnorm(15, 10, 2))
+#'
+#' entropy <- function(x, base=2) {
+#'     freqs <- table(x) / length(x)
+#'     -sum(freqs * log(freqs, base=base))
+#' }
+#'
+#' H5 <- entropy(x, base=5)
+#'
+#' bootstats(x, 
+#'   smooth=function(b=b, x=x, H5=H5) {
+#'       b + rnorm(length(b), 0, H5/sqrt(length(x)))
+#'   })
+#'
+#' bootstats(x)
 
 bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5, 
   smooth=TRUE, return_resamples=FALSE) {

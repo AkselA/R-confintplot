@@ -19,5 +19,24 @@ bootstats(1:4)
 
 bootstats(1:4, nrep=9999)
 
+## Simple smooth function based on jitter()
+bootstats(1:5, smooth=function(b=b) jitter(b))
+
+## Alternative entropy based smooth function
+x <- round(rnorm(15, 10, 2))
+
+entropy <- function(x, base=2) {
+    freqs <- table(x) / length(x)
+    -sum(freqs * log(freqs, base=base))
+}
+
+H5 <- entropy(x, base=5)
+
+bootstats(x, 
+  smooth=function(b=b, x=x, H5=H5) {
+      b + rnorm(length(b), 0, H5/sqrt(length(x)))
+  })
+
+bootstats(x)
 }
 \keyword{univar}
