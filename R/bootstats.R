@@ -3,6 +3,10 @@
 #' This function returns the bootstrapped mean and median, 
 #' and the respective confidence intervals, of the supplied numeric vector.
 #' @param x A vector of numerical values.
+#' @param p.level A number giving the level of confidence for the intervals
+#' @param nrep The number of repetitions, or resamples, to perform. Defaults to
+#' \code{max(100, (10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.
+#' @param excact.thrs Upper level of \code{length(x)} at which all 
 #' @keywords univar
 #' @export
 #' @examples
@@ -48,7 +52,7 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5,
     }
     
     if (length(x) <= exact.thrs & is.null(nrep)) {
-        b <- t(expand.grid(rep(list(x), length(x))))
+        b <- t(multisubsets(x))
         nrep <- ncol(b)
         b <- do.call(smooth, as.list(formals(smooth)))
 
@@ -101,5 +105,31 @@ print.bootlist <- function(x, ...){
     NextMethod()
 }
 
+#' Multisubsets of cardinality k
+#'
+#' All possible ways to sample k elements from a given set with replacement.
+#'
+#' @param v A vector to sample from
+#' @param k The size of the subsamples
+#' @examples
+#' 
+#' multisubsets(1:3, 4)
+#' 
+#' multisubsets(1:4, 3)
+#'
+#' multisubsets(c("red", "blue", "green"))
+multisubsets <- function(v, k=length(v)) {
+	if(k <= 0 | length(v) <= 0)
+		NULL
+	else 
+	    if (k == 1)
+		matrix(v, ncol = 1)
+	else
+	    rbind(cbind(v[1], 
+	          Recall(v, k - 1)),
+	          Recall(v[-1], k))
+}
 
-
+multichoose <- function(n, k=n) {
+	choose(n + k - 1, k)
+}

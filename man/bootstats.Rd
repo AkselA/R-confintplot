@@ -2,13 +2,20 @@
 % Please edit documentation in R/bootstats.R
 \name{bootstats}
 \alias{bootstats}
-\title{Obtain mean and median with bootstrapped confidence intervals.}
+\title{Calculate mean and median with bootstrapped confidence intervals.}
 \usage{
 bootstats(x, p.level = 0.95, nrep = NULL, exact.thrs = 5, smooth = TRUE,
   return_resamples = FALSE)
 }
 \arguments{
 \item{x}{A vector of numerical values.}
+
+\item{p.level}{A number giving the level of confidence for the intervals}
+
+\item{nrep}{The number of repetitions, or resamples, to perform. Defaults to
+\code{max(100, (10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.}
+
+\item{excact.thrs}{Upper level of \code{length(x)} at which all}
 }
 \description{
 This function returns the bootstrapped mean and median, 
