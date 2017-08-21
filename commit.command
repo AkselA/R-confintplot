@@ -6,5 +6,5 @@ read Message
 git add -A && git commit -m "$Message"
 echo "Push? (y/n)"
 read Push
-case "$var" in ([[:upper:]]) git push ;; esac
+case "$Push" in ([yY]) git push ;; esac
 $SHELL
