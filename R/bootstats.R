@@ -35,6 +35,11 @@
 #'   })
 #'
 #' bootstats(x)
+#'
+#' ## Return resamples and plot distribution of means
+#' bst <- bootstats(c(1, 2, 2, 4), return_resamples=TRUE)
+#' t(bst[[2]])
+#' plot(density(colMeans(bst[[2]])))
 
 bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=8, 
   smooth=TRUE, return_resamples=FALSE) {
