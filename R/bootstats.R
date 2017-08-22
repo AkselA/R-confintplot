@@ -111,6 +111,8 @@ print.bootlist <- function(x, ...){
 #' Multisubsets of cardinality k
 #'
 #' All possible ways to sample k elements from a given set with replacement.
+#' Based off multic::subsets()
+#' See also: Statistics and Computing, Venebles and Ripley, p49
 #'
 #' @param v A vector to sample from
 #' @param k The size of the subsamples
