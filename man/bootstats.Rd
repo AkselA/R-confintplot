@@ -13,7 +13,7 @@ bootstats(x, p.level = 0.95, nrep = NULL, exact.thrs = 8, smooth = TRUE,
 \item{p.level}{A number giving the level of confidence for the intervals}
 
 \item{nrep}{The number of repetitions, or resamples, to perform. Defaults to
-\code{max(500, (10^6)/length(x))}, except if \code{length(x) <= exact.thrs}.}
+\code{max(500, 2*(10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.}
 
 \item{exact.thrs}{Upper level of \code{length(x)} at which all}
 }
@@ -22,7 +22,7 @@ This function returns the bootstrapped mean and median,
 and the respective confidence intervals, of the supplied numeric vector.
 }
 \examples{
-bootstats(rnorm(100), p.level=0.99)
+bootstats(rnorm(1000), p.level=0.9, smooth=FALSE)
 
 bootstats(c(1, 3, 4, 4, 6, 7, 9), exact.thrs=7, smooth=FALSE)
 

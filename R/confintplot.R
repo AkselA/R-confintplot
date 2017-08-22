@@ -7,11 +7,13 @@
 #' @param x vector, matrix, data.frame or list of variables.
 
 #' @param nrep number of repetitions. By default set to
-#' \code{max(10, (10^5)/lengths(x))}.
+#' \code{max(10, 2*(10^5)/lengths(x))}.
 
 #' @keywords multivariate hplot
 #' @export
 #' @examples
+#' confintplot(matrix(c(1, 3, 4, 4, 6, 5, 5, 7, 6, 5, 8, 5), ncol=2))
+#' 
 #' ## works with variables of unequal length.
 #' ## returs invisibly the output of bootstats for each variable,
 #' ## plus the x-positions used when plotting.
@@ -58,7 +60,11 @@ confintplot <- function(x, nrep=NULL, p.level=0.95, smooth=TRUE, box.width=0.5,
     colMax <- function(x) sapply(data.frame(x), max)
     colMin <- function(x) sapply(data.frame(x), min)
     
-    stats0 <- lapply(x, bootstats, nrep=nrep, p.level=p.level, smooth=smooth)
+    bootfun <- function(b) {
+    	bootstats(b, nrep=nrep, p.level=p.level, smooth=smooth)[[1]]
+    }
+    
+    stats0 <- lapply(x, bootfun)
     stats0 <- as.data.frame(stats0)
     stats <- stats0[!rownames(stats0) %in% c("nrep", "p.level"), , drop=FALSE]
     stats <- as.matrix(stats)
@@ -132,8 +138,9 @@ confintplot <- function(x, nrep=NULL, p.level=0.95, smooth=TRUE, box.width=0.5,
     
     
     # Vertical
-    segments(x0=xseq, y0=colMin(stats), x1=xseq, y1=colMax(stats),
-    lwd=lwd.box, col=col.box)
+    segments(x0=xseq, y0=colMin(stats), 
+             x1=xseq, y1=colMax(stats),
+             lwd=lwd.box, col=col.box)
     
     axis(1, xseq, colnames(x))
 

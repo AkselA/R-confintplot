@@ -5,12 +5,12 @@
 #' @param x A vector of numerical values.
 #' @param p.level A number giving the level of confidence for the intervals
 #' @param nrep The number of repetitions, or resamples, to perform. Defaults to
-#' \code{max(500, (10^6)/length(x))}, except if \code{length(x) <= exact.thrs}.
+#' \code{max(500, 2*(10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.
 #' @param exact.thrs Upper level of \code{length(x)} at which all 
 #' @keywords univar
 #' @export
 #' @examples
-#' bootstats(rnorm(100), p.level=0.99)
+#' bootstats(rnorm(1000), p.level=0.9, smooth=FALSE)
 #' 
 #' bootstats(c(1, 3, 4, 4, 6, 7, 9), exact.thrs=7, smooth=FALSE)
 #' 
@@ -61,22 +61,22 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=8,
     } else {
         
         if (is.null(nrep)) {
-            nrep <- (10^6)/length(x)
+            nrep <- 2*(10^5)/length(x)
             nrep <- floor(max(500, nrep))
         }
         b <- replicate(nrep, sample(x, length(x), replace=TRUE))
         b <- do.call(smooth, as.list(formals(smooth)))
     }
         
-    mn <- apply(b, 2, mean)
+    mn <- colMeans(b)
     b.mean <- mean(mn)
-    mean.upper <- quantile(mn, (1-p.level)/2)
-    mean.lower <- quantile(mn, 1-((1-p.level)/2))
+    mean.upper <- quantile(mn, 1-((1-p.level)/2))
+    mean.lower <- quantile(mn, (1-p.level)/2)
     
     md <- apply(b, 2, median)
     b.median <- mean(md)
-    median.upper <- quantile(md, (1-p.level)/2)
-    median.lower <- quantile(md, 1-((1-p.level)/2))
+    median.upper <- quantile(md, 1-((1-p.level)/2))
+    median.lower <- quantile(md, (1-p.level)/2)
     
     stats <- data.frame(b.mean, mean.upper, mean.lower, 
                         b.median, median.upper, median.lower, 

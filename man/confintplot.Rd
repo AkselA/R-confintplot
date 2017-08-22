@@ -13,7 +13,7 @@ confintplot(x, nrep = NULL, p.level = 0.95, smooth = TRUE,
 \item{x}{vector, matrix, data.frame or list of variables.}
 
 \item{nrep}{number of repetitions. By default set to
-\code{max(10, (10^5)/lengths(x))}.}
+\code{max(10, 2*(10^5)/lengths(x))}.}
 }
 \description{
 An alternative to \code{\link{boxplot}} that plots the 
@@ -21,6 +21,8 @@ mean and median for each variable and their confidence intervals,
 all calculated using bootstrapping.
 }
 \examples{
+confintplot(matrix(c(1, 3, 4, 4, 6, 5, 5, 7, 6, 5, 8, 5), ncol=2))
+
 ## works with variables of unequal length.
 ## returs invisibly the output of bootstats for each variable,
 ## plus the x-positions used when plotting.
