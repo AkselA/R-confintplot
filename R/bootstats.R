@@ -5,14 +5,16 @@
 #' @param x A vector of numerical values.
 #' @param p.level A number giving the level of confidence for the intervals
 #' @param nrep The number of repetitions, or resamples, to perform. Defaults to
-#' \code{max(100, (10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.
-#' @param excact.thrs Upper level of \code{length(x)} at which all 
+#' \code{max(500, (10^6)/length(x))}, except if \code{length(x) <= exact.thrs}.
+#' @param exact.thrs Upper level of \code{length(x)} at which all 
 #' @keywords univar
 #' @export
 #' @examples
-#' bootstats(1:4)
+#' bootstats(rnorm(100), p.level=0.99)
 #' 
-#' bootstats(1:4, nrep=9999)
+#' bootstats(c(1, 3, 4, 4, 6, 7, 9), exact.thrs=7, smooth=FALSE)
+#' 
+#' bootstats(c(1, 3, 4, 4, 6, 7, 8), exact.thrs=1, smooth=FALSE)
 #' 
 #' ## Simple smooth function based on jitter()
 #' bootstats(1:5, smooth=function(b=b) jitter(b))
@@ -34,7 +36,7 @@
 #'
 #' bootstats(x)
 
-bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5, 
+bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=8, 
   smooth=TRUE, return_resamples=FALSE) {
     
     x <- na.omit(x)
@@ -59,8 +61,8 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5,
     } else {
         
         if (is.null(nrep)) {
-            nrep <- (10^5)/length(x)
-            nrep <- floor(max(100, nrep))
+            nrep <- (10^6)/length(x)
+            nrep <- floor(max(500, nrep))
         }
         b <- replicate(nrep, sample(x, length(x), replace=TRUE))
         b <- do.call(smooth, as.list(formals(smooth)))
@@ -83,10 +85,11 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5,
     stats <- t(stats)
     
     if (return_resamples) {
-    	stats <- list(resamples=b, stats)
-    	class(stats) <- c("bootlist", class(stats))
+    	stats <- list(stats, resamples=b)
+    } else {
+    	stats <- list(stats)
     }
-    
+    class(stats) <- c("bootlist", class(stats))    
     stats
     
 }
@@ -101,7 +104,7 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=5,
 #' bst$resamples
 
 print.bootlist <- function(x, ...){
-    x <- x[[2]]
+    x <- round(x[[1]], 5)
     NextMethod()
 }
 
