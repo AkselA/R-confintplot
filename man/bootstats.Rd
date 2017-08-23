@@ -47,5 +47,10 @@ bootstats(x,
   })
 
 bootstats(x)
+
+## Return resamples and plot distribution of means
+bst <- bootstats(c(1, 2, 2, 4), return_resamples=TRUE)
+t(bst[[2]])
+plot(density(colMeans(bst[[2]])))
 }
 \keyword{univar}
