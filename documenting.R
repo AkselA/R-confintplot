@@ -2,7 +2,7 @@ require(roxygen2)
 require(devtools)
 
 setwd("~/Documents/R/prosjekter")
-projname <- "rollfun"
+projname <- "confintplot"
 create(projname)
 
 # turns objects found in "projname"/data.R (project root)
