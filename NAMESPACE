@@ -2,3 +2,4 @@
 
 export(bootstats)
 export(confintplot)
+export(multisubsets)

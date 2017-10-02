@@ -6,6 +6,7 @@
 #'
 #' @param v A vector to sample from
 #' @param k The size of the subsamples
+#' @export
 #' @examples
 #' 
 #' multisubsets(1:3, 4)

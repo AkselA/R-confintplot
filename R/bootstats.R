@@ -112,3 +112,17 @@ print.bootlist <- function(x, ...){
     x <- round(x[[1]], 5)
     NextMethod()
 }
+
+
+jackknife <- function(x, FUN, ...) {
+	sapply(1:length(x), function(id) {
+        FUN(x[-id], ...)
+    })
+}
+
+data <- c(rep(1, 6), rep(2, 5))
+jk.theta <- jackknife(data, median)
+theta.hat <- median(data)
+
+a <- sum((theta.hat-jk.theta)^3)/(6*sum((theta.hat-jk.theta)^2)^(3/2))
+a
