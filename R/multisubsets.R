@@ -26,6 +26,8 @@ multisubsets <- function(v, k=length(v)) {
 	          Recall(v[-1], k))
 }
 
+#' @export
+
 multichoose <- function(n, k=n) {
 	choose(n + k - 1, k)
 }

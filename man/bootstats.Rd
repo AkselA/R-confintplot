@@ -15,7 +15,8 @@ bootstats(x, p.level = 0.95, nrep = NULL, exact.thrs = 8, smooth = TRUE,
 \item{nrep}{The number of repetitions, or resamples, to perform. Defaults to
 \code{max(500, 2*(10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.}
 
-\item{exact.thrs}{Upper level of \code{length(x)} at which all}
+\item{exact.thrs}{Upper level of \code{length(x)} at which all possible subsamples
+are used}
 }
 \description{
 This function returns the bootstrapped mean and median, 

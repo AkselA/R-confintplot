@@ -6,7 +6,8 @@
 #' @param p.level A number giving the level of confidence for the intervals
 #' @param nrep The number of repetitions, or resamples, to perform. Defaults to
 #' \code{max(500, 2*(10^5)/length(x))}, except if \code{length(x) <= exact.thrs}.
-#' @param exact.thrs Upper level of \code{length(x)} at which all 
+#' @param exact.thrs Upper level of \code{length(x)} at which all possible subsamples
+#' are used
 #' @keywords univar
 #' @export
 #' @examples
