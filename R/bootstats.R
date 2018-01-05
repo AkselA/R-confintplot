@@ -101,6 +101,7 @@ bootstats <- function(x, p.level=0.95, nrep=NULL, exact.thrs=8,
 
 #' Print method for class bootlist.
 #'
+#' @export
 #' @examples
 #' x <- c(1, 3, 4, 2, 8)
 #' bst <- bootstats(x, nrep=5, return_resamples=TRUE)
@@ -114,15 +115,16 @@ print.bootlist <- function(x, ...){
 }
 
 
+#' @export
 jackknife <- function(x, FUN, ...) {
 	sapply(1:length(x), function(id) {
         FUN(x[-id], ...)
     })
 }
 
-data <- c(rep(1, 6), rep(2, 5))
-jk.theta <- jackknife(data, median)
-theta.hat <- median(data)
+# data <- c(rep(1, 6), rep(2, 5))
+# jk.theta <- jackknife(data, median)
+# theta.hat <- median(data)
 
-a <- sum((theta.hat-jk.theta)^3)/(6*sum((theta.hat-jk.theta)^2)^(3/2))
-a
+# a <- sum((theta.hat-jk.theta)^3)/(6*sum((theta.hat-jk.theta)^2)^(3/2))
+# a
